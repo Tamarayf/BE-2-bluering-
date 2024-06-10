@@ -10,8 +10,11 @@ import com.example.Assesment.Services.EmployeeService;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 @CrossOrigin(origins = "https://localhost:4200")
@@ -44,16 +47,24 @@ public class EmployeeController {
         }
     }
 
-    @PatchMapping("/employees/{empId}")
-    public Apiresponse updateEmployee(@PathVariable Integer empId, @RequestBody Map<String, Object> updateFields) {
-        try {
-            service1.updateEmployee(empId, updateFields);
-            return new Apiresponse(true, "Employee updated successfully", empId);
-        } catch (ResourceNotFoundException e) {
-            return new Apiresponse(false, "Employee not found with id: " + empId, null);
-        }
+//    @PatchMapping("/employees/{id}")
+//    public Apiresponse updateEmployee(@PathVariable Integer id, @RequestBody Map<String, Object> updateFields) {
+//        try {
+//            service1.updateEmployee(id, updateFields);
+//            return new Apiresponse(true, "Employee updated successfully", id);
+//        } catch (ResourceNotFoundException e) {
+//            return new Apiresponse(false, "Employee not found with id: " + id, null);
+//        }
+//    }
+@PatchMapping("/employees/{id}")
+public ResponseEntity<Apiresponse> updateEmployee(@PathVariable Integer id, @RequestBody Map<String, Object> updateFields) {
+    try {
+        service1.updateEmployee(id, updateFields);
+        return ResponseEntity.ok(new Apiresponse(true, "Employee updated successfully", id));
+    } catch (ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Apiresponse(false, "Employee not found with id: " + id, null));
     }
-
+}
     @PatchMapping("/departments/{depId}")
     public Apiresponse updateDepartment(@PathVariable Integer depId, @RequestBody Map<String, Object> updateFields) {
         try {
@@ -99,11 +110,16 @@ public class EmployeeController {
         }
     }
 
-    @GetMapping("/departments")
-    public Apiresponse getDepartments() {
-        List<DepartmentDTO> departmentsDTOs = service1.getDepartments();
-        return new Apiresponse(true, "Departments retrieved successfully", departmentsDTOs);
-    }
+//    @GetMapping("/departments")
+//    public Apiresponse getDepartments() {
+//        List<DepartmentDTO> departmentsDTOs = service1.getDepartments();
+//        return new Apiresponse(true, "Departments retrieved successfully", departmentsDTOs);
+//    }
+@GetMapping("/departments")
+public Apiresponse getDepartments() {
+    List<DepartmentDTO> departmentsDTOs = service1.getDepartments();
+    return new Apiresponse(true, "Departments retrieved successfully", departmentsDTOs.isEmpty() ? Collections.emptyList() : departmentsDTOs);
+}
 
 
     @GetMapping("/departments/{depId}")

@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+// Inside your class
 
 
 @Service
@@ -33,6 +37,7 @@ public class EmployeeServiceImp  implements EmployeeService {
     @Autowired
     private DepartmentMapper departmentMapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(EmployeeServiceImp.class);
 
     public DepartmentEntity DefineDepartment(DepartmentDTO departmentDTO) {
         DepartmentEntity departmentEntity = departmentMapper.departmentDTOToDepartmentEntity(departmentDTO);
@@ -53,6 +58,7 @@ public class EmployeeServiceImp  implements EmployeeService {
         updateEntity(entityDto, entityToUpdate, EmployeeEntity.class);
         employeeRepository.saveAndFlush(entityToUpdate);
     }
+
 
 
     public Integer deleteEmployee(Integer empId) {
