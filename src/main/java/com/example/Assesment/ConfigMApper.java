@@ -33,7 +33,10 @@ class MapperConfig {
     public ExpenseTypeMapper expenseTypeMapper() {
         return Mappers.getMapper( ExpenseTypeMapper.class);
     }
-
+    @Bean
+    public LeaveTypeMapper leaveTypeMapper() {
+        return Mappers.getMapper(LeaveTypeMapper.class);
+    }
     @Bean
     public ExpenseClaimEntryMapper expenseClaimEntryMapper() {
         return Mappers.getMapper(ExpenseClaimEntryMapper.class);

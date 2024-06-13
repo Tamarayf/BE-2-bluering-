@@ -11,7 +11,8 @@ public interface LeaveTypeMapper {
     LeaveTypeMapper INSTANCE = Mappers.getMapper(LeaveTypeMapper.class);
 
 
-    LeaveTypeDTO leaveTypeEntityToLeaveTypeDTO(LeaveTypeEntity leaveTypeEntity);
+
+     LeaveTypeDTO leaveTypeEntityToLeaveTypeDTO(LeaveTypeEntity leaveTypeEntity);
 
     LeaveTypeEntity leaveTypeDTOToLeaveTypeEntity(LeaveTypeDTO leaveTypeDTO);
 //

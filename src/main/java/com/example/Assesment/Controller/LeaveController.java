@@ -2,10 +2,7 @@ package com.example.Assesment.Controller;
 
 
 import com.example.Assesment.Apiresponse;
-import com.example.Assesment.DTO.LeaveRequestDTO;
-import com.example.Assesment.DTO.LeaveTypeDTO;
-import com.example.Assesment.DTO.LeaveeDTO;
-import com.example.Assesment.DTO.PaginationRequest;
+import com.example.Assesment.DTO.*;
 import com.example.Assesment.Entity.LeaveTypeEntity;
 import com.example.Assesment.Entity.LeaveeEntity;
 import com.example.Assesment.Repository.LeaveeRepository;
@@ -41,12 +38,21 @@ public class LeaveController {
     private LeaveeRepository leaveRepository;
 
 
-
+    @GetMapping("/leaves")
+    public Apiresponse getLeaves() {
+        List<LeaveeDTO> leavesDTOs = service2.getLeaves();
+        return new Apiresponse(true, "Leaves retrieved successfully", leavesDTOs);
+    }
 
     @PostMapping("/leavesType/")
     public Apiresponse DefineLeaveType(@RequestBody LeaveTypeDTO leaveTypeDTO) {
         LeaveTypeEntity definedLeaveType = service2.DefineLeaveType(leaveTypeDTO);
         return new Apiresponse(true, "LeaveType created successfully", definedLeaveType.getIdLeaveType());
+    }
+    @GetMapping("/leavesType")
+    public Apiresponse getTypeLeaves() {
+        List<LeaveTypeDTO> leavestypeDTOs = service2.getLeaveType();
+        return new Apiresponse(true, "Leaves retrieved successfully", leavestypeDTOs);
     }
 
     @PostMapping("/Leave/")
@@ -81,15 +87,26 @@ public class LeaveController {
 
 
 
-    @GetMapping("/leaves/paginated")
-    public Apiresponse getLeavesByTypeAndEmployee(@RequestBody PaginationRequest request) {
-        try {
-            List<LeaveeDTO> leaves = service2.getLeavesByTypeAndEmployee(request.getLeaveTypeId(), request.getEmployeeId(), request.getPage(), request.getSize());
-            return new Apiresponse(true, "Leave requests retrieved successfully", leaves);
-        } catch (Exception e) {
-            return new Apiresponse(false, "Failed to retrieve leave requests: " + e.getMessage(), null);
-        }
+    @PostMapping("/leavesPag")
+    public Apiresponse getLeaves(@RequestBody LeaveeREquest2DTO leaveRequest) {
+        PaginationRequest response = service2.getLeavesByTypeAndEmployee(
+                leaveRequest.getLeaveTypeId(),
+                leaveRequest.getEmployeeId(),
+                leaveRequest.getPage(),
+                leaveRequest.getSize()
+        );
+
+         return  new Apiresponse(
+                true,
+                "Leaves fetched successfully",
+                response
+        );
+
+
     }
+}
+
+
 
 
 //    @GetMapping("/leaves/employee-date-range")
@@ -135,7 +152,7 @@ public class LeaveController {
 //        }
 
 
-    }
+
 
 
 

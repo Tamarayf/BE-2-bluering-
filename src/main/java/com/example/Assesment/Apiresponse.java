@@ -1,6 +1,9 @@
 package com.example.Assesment;
 
+import com.example.Assesment.DTO.LeaveeDTO;
 import lombok.Data;
+
+import java.util.List;
 
 
 @Data
@@ -19,4 +22,6 @@ public class Apiresponse {
         this.message=message;
         this.returnField=returnField;
     }
+
+
 }

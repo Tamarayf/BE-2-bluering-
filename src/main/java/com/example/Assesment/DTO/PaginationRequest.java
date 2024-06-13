@@ -1,14 +1,18 @@
 package com.example.Assesment.DTO;
 
+import com.example.Assesment.Entity.LeaveTypeEntity;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class PaginationRequest {
 
-        private Integer employeeId;
-        private Integer leaveTypeId;
-        private Integer page;
-        private Integer size;
+
+        private List<LeaveeDTO> items;
+//        private int currentPage;
+        private long totalItems;
+//        private int totalPages;
 
 
 
