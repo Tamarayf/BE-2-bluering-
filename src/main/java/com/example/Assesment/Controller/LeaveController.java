@@ -21,7 +21,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
-
+@CrossOrigin(origins = "https://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class LeaveController {
