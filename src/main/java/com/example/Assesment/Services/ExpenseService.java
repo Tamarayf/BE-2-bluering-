@@ -17,7 +17,8 @@ public interface ExpenseService {
     ExpenseTypeEntity DefineExpenseType(ExpenseTypeDTO expenseTypeDTO);
     ExpenseClaimEntity createExpenseClaim(ExpenseClaimDTO dto);
 
-
+    List<ExpenseClaimDTO> getExpense();
+    List<ExpenseClaimEntryDTO> getExpenseClaimEntriesByExpenseClaim(Integer expenseClaimId);
 
     Double getTotalAmountByTypeIdAndEmployee(Integer expenseTypeId, Integer employeeId);
 //    List<TotalClaimPerTypePerEmployeeDTO> getTotalClaimsPerTypePerEmployee();

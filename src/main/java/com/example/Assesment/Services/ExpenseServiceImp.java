@@ -53,7 +53,13 @@ public class ExpenseServiceImp implements ExpenseService {
         return expenseTyperepository.save(expenseTypeEntity);
 
     }
-
+    public  List<ExpenseClaimDTO> getExpense()
+    {
+        List<ExpenseClaimEntity> expenseClaimEntities = expenseClaimrepository.findAll();
+        return expenseClaimEntities.stream()
+                .map(expenseClaimEntity  -> expenseClaimMapper.expenseClaimEntityToExpenseClaimDTO(expenseClaimEntity ))
+                .collect(Collectors.toList());
+    }
 
     public ExpenseClaimEntity createExpenseClaim(ExpenseClaimDTO dto) {
         ExpenseClaimEntity expenseClaim = ExpenseClaimMapper.INSTANCE.expenseClaimDTOToExpenseClaimEntity(dto);
@@ -79,6 +85,18 @@ public class ExpenseServiceImp implements ExpenseService {
         return r;
     }
 
+
+    public List<ExpenseClaimEntryDTO> getExpenseClaimEntriesByExpenseClaim(Integer expenseClaimId) {
+        List<ExpenseClaimEntryEntity> entries = expenseClaimEntryrepository.findAllByExpenseClaimId(expenseClaimId);
+        return entries.stream()
+                .map(entry -> {
+                    ExpenseClaimEntryDTO entryDTO = expenseClaimEntryMapper.expenseClaimEntryEntityToExpenseClaimEntryDTO(entry);
+                    // Assuming you have a method to get the related data, similar to getEmployeesByDepartment
+
+                    return entryDTO;
+                })
+                .collect(Collectors.toList());
+    }
     //    public ClaimTypeTotalDTO getTotalClaimsByTypeForEmployee(ExpenseClaimRequestDTO request) {
 //        List<ExpenseClaim> claims = expenseClaimRepository.findByEmployeeId(request.getEmployeeId());
 //
