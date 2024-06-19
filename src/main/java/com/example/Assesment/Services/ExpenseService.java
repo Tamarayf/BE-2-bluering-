@@ -21,7 +21,5 @@ public interface ExpenseService {
     List<ExpenseClaimEntryDTO> getExpenseClaimEntriesByExpenseClaim(Integer expenseClaimId);
 
     Double getTotalAmountByTypeIdAndEmployee(Integer expenseTypeId, Integer employeeId);
-//    List<TotalClaimPerTypePerEmployeeDTO> getTotalClaimsPerTypePerEmployee();
 
-//    List<EmployeeDTO> getExpenseClaimsPerEmployeePerType(Integer id);
 }

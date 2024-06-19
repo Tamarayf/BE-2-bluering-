@@ -56,15 +56,7 @@ public class ExpenseController {
         }
     }
 
-//
-//    @GetMapping("/employee/{id}/expenseClaims")
-//    public ResponseEntity<List<EmployeeDTO>> getExpenseClaimsPerEmployeePerType(@PathVariable Integer id) {
-//        List<EmployeeDTO> expenseClaims = service3.getExpenseClaimsPerEmployeePerType(id);
-//        if (expenseClaims.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(expenseClaims);
-//    }
+
 
 
 
@@ -90,23 +82,9 @@ public class ExpenseController {
 
         return new Apiresponse(true, "Total amount retrieved successfully", totalAmount);
     }
-
-//
-
-    }
+}
 
 
 
-//    @PostMapping("/expenseClaimEntry/")
-//    public Apiresponse defineExpenseClaimEntry(@RequestBody ExpenseClaimEntryDTO expenseClaimEntryDTO ) {
-//        ExpenseClaimEntryEntity createdExpenseClaimEntry = service3.submitExpenseClaim(expenseClaimEntryDTO);
-//        return new Apiresponse(true, "ExpenseClaimEntry created successfully", createdExpenseClaimEntry.getExpenseClaimEntryId());
-//    }
-////
-
-
-
-//
-//
 
 

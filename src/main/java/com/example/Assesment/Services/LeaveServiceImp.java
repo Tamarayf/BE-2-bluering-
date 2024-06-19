@@ -51,7 +51,6 @@ public class LeaveServiceImp implements LeaveService {
             throw new IllegalArgumentException("Both fromDate and toDate must be provided");
         }
 
-        // Calculate number of days between fromDate and toDate
         long numberOfDays = leaveeDTO.getFromDate().until(leaveeDTO.getToDate(), ChronoUnit.DAYS);
         leaveeDTO.setNumberOfDays((int) numberOfDays);
 
@@ -91,34 +90,6 @@ public class LeaveServiceImp implements LeaveService {
 
 
 
-    //    public List<LeaveeDTO> getLeavesByTypeAndEmployee(Integer typeId, Integer employeeId, int page, int size) {
-//        Pageable pageable = PageRequest.of(page, size);
-//        Page<LeaveeEntity> leavePage = leaveRepository.findByLeaveTypeIdAndEmployeeId(typeId, employeeId, pageable);
-//
-//        return leavePage.getContent().stream()
-//                .map(leaveMapper::leaveeEntityToLeaveeDTO)
-//                .collect(Collectors.toList());
-//    }
-//public PaginationRequest getLeavesByTypeAndEmployee(Integer typeId, Integer employeeId, int page, int size) {
-//    Pageable pageable = PageRequest.of(page, size);
-//    Page<LeaveeEntity> leavePage = leaveRepository.findByLeaveTypeIdAndEmployeeId(typeId, employeeId, pageable);
-//
-//    PaginationRequest response = new PaginationRequest();
-//    response.setItems(leavePage.getContent().stream()
-//            .map(leaveMapper::leaveeEntityToLeaveeDTO)
-//            .collect(Collectors.toList()));
-//    response.setCurrentPage(page);
-//    response.setTotalItems(leavePage.getTotalElements());
-//    response.setTotalPages(leavePage.getTotalPages());
-//
-//    return response;
-//}
-//
-//
-//
-//}
-
-
 
     public PaginationRequest getLeavesByTypeAndEmployee(Integer leaveTypeId, Integer employeeId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -149,10 +120,7 @@ public class LeaveServiceImp implements LeaveService {
     }
 
 }
-//    public Page<LeaveeDTO> getLeavesByTypeAndEmployee(Integer employeeId, String leaveType, Pageable pageable) {
-//        Page<LeaveeEntity> leaveEntities = leaveRepository.findByEmployeeIdAndLeaveType(employeeId, leaveType, pageable);
-//        return leaveEntities.map(leaveMapper::leaveeEntityToLeaveeDTO);
-//    }
+
 
 
 

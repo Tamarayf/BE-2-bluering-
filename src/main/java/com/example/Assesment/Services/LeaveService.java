@@ -21,7 +21,6 @@ public interface LeaveService {
     List<LeaveTypeDTO> getLeaveType();
     List<LeaveeDTO> getLeavesByEmployeeAndDateRange(Integer employeeId, LocalDate fromDate, LocalDate toDate);
  PaginationRequest getLeavesByTypeAndEmployee(Integer typeId, Integer employeeId, int page, int size);
-//   Page<LeaveeDTO> getLeavesByTypeAndEmployee(Integer employeeId, String leaveType, Pageable pageable);
 
 
 }

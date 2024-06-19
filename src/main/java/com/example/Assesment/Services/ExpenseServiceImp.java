@@ -60,30 +60,55 @@ public class ExpenseServiceImp implements ExpenseService {
                 .map(expenseClaimEntity  -> expenseClaimMapper.expenseClaimEntityToExpenseClaimDTO(expenseClaimEntity ))
                 .collect(Collectors.toList());
     }
-
     public ExpenseClaimEntity createExpenseClaim(ExpenseClaimDTO dto) {
+        // Convert DTO to Entity
         ExpenseClaimEntity expenseClaim = ExpenseClaimMapper.INSTANCE.expenseClaimDTOToExpenseClaimEntity(dto);
         expenseClaim = expenseClaimrepository.save(expenseClaim);
 
+        // Convert DTO entries to Entity entries
         List<ExpenseClaimEntryEntity> entries = dto.getEntries().stream()
                 .map(ExpenseClaimEntryMapper.INSTANCE::expenseClaimEntryDTOToExpenseClaimEntryEntity)
-
                 .collect(Collectors.toList());
 
+        // Save entries and set the claim ID
         for (ExpenseClaimEntryEntity entry : entries) {
             entry.setExpenseClaimId(expenseClaim.getExpenseClaimId());
             expenseClaimEntryrepository.save(entry);
         }
 
-        double totalAmount = entries.stream()
+        // Calculate total amount or set to 0 if no entries
+        double totalAmount = entries.isEmpty() ? 0 : entries.stream()
                 .mapToDouble(ExpenseClaimEntryEntity::getTotal)
                 .sum();
         expenseClaim.setTotal(totalAmount);
 
-        ExpenseClaimEntity r = expenseClaimrepository.save(expenseClaim);
-
-        return r;
+        // Save and return the updated expense claim
+        return expenseClaimrepository.save(expenseClaim);
     }
+
+//    public ExpenseClaimEntity createExpenseClaim(ExpenseClaimDTO dto) {
+//        ExpenseClaimEntity expenseClaim = ExpenseClaimMapper.INSTANCE.expenseClaimDTOToExpenseClaimEntity(dto);
+//        expenseClaim = expenseClaimrepository.save(expenseClaim);
+//
+//        List<ExpenseClaimEntryEntity> entries = dto.getEntries().stream()
+//                .map(ExpenseClaimEntryMapper.INSTANCE::expenseClaimEntryDTOToExpenseClaimEntryEntity)
+//
+//                .collect(Collectors.toList());
+//
+//        for (ExpenseClaimEntryEntity entry : entries) {
+//            entry.setExpenseClaimId(expenseClaim.getExpenseClaimId());
+//            expenseClaimEntryrepository.save(entry);
+//        }
+//
+//        double totalAmount = entries.stream()
+//                .mapToDouble(ExpenseClaimEntryEntity::getTotal)
+//                .sum();
+//        expenseClaim.setTotal(totalAmount);
+//
+//        ExpenseClaimEntity r = expenseClaimrepository.save(expenseClaim);
+//
+//        return r;
+//    }
 
 
     public List<ExpenseClaimEntryDTO> getExpenseClaimEntriesByExpenseClaim(Integer expenseClaimId) {
@@ -97,83 +122,22 @@ public class ExpenseServiceImp implements ExpenseService {
                 })
                 .collect(Collectors.toList());
     }
-    //    public ClaimTypeTotalDTO getTotalClaimsByTypeForEmployee(ExpenseClaimRequestDTO request) {
-//        List<ExpenseClaim> claims = expenseClaimRepository.findByEmployeeId(request.getEmployeeId());
-//
-//        Double totalAmount = claims.stream()
-//                .flatMap(claim -> claim.getEntries().stream())
-//                .filter(entry -> entry.getExpenseTypeId().equals(request.getExpenseTypeId()))
-//                .mapToDouble(entry -> entry.getTotal())
-//                .sum();
-//
-//        return new ClaimTypeTotalDTO(request.getExpenseTypeId(), totalAmount);
-//    }
 
+public Double getTotalAmountByTypeIdAndEmployee(Integer expenseTypeId, Integer employeeId) {
+    List<ExpenseClaimEntryEntity> entries = expenseClaimEntryrepository.findByExpenseTypeIdAndEmployeeId(expenseTypeId, employeeId);
 
-//    public List<EmployeeDTO> getExpenseClaimsPerEmployeePerType(Integer id) {
-//        List<EmployeeEntity> employees = employeeRepository.findAll();
-//        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
-//        for (EmployeeEntity employee : employees) {
-//            EmployeeDTO employeeDTO = mapper.employeeEntityToEmployeeDTO(employee);
-//            List<Integer> expenseTypes = expenseClaimEntryrepository.getExpensesForEmployee(employee.getEmpId());
-//            List<ExpenseTypeDTO> expensetypeDTOS = new ArrayList<>();
-//            for (Integer expenseType : expenseTypes) {
-//                ExpenseTypeDTO expensetypeDTO = expenseTypeMapper
-//                        .expenseTypeEntityToExpenseTypeDTO(expenseTyperepository.getReferenceById(expenseType));
-//                expensetypeDTO.setExpenseClaimEntries(expenseClaimEntryrepository.findByExpenseTypeId(expenseType)
-//                        .stream()
-//                        .map(expenseClaimEntryMapper::expenseClaimEntryEntityToExpenseClaimEntryDTO)
-//                        .collect(Collectors.toList()));
-//                expensetypeDTOS.add(expensetypeDTO);
-//            }
-//            employeeDTO.setExpenseTypeDTOList(expensetypeDTOS);
-//            employeeDTOs.add(employeeDTO);
-//        }
-//        return employeeDTOs;
-//    }
-
-
-//    public Double getTotalClaimsPerTypePerEmployee(Integer employeeId, Integer expenseClaimTypeId) {
-//        List<ExpenseClaimEntryEntity> expenseClaims = expenseClaimEntryrepository.findByEmployeeIdAndExpenseClaimTypeId(employeeId, expenseClaimTypeId);
-//
-//        Double totalClaims = 0.0;
-//        for (ExpenseClaimEntryEntity expenseClaim : expenseClaims) {
-//            totalClaims += expenseClaim.getTotal();
-//        }
-//
-//        return totalClaims;
-//}
-
-//    public Double getTotalAmountByTypeIdAndEmployee(Integer expenseTypeId, Integer employeeId) {
-//        System.out.println("Fetching total amount for expenseTypeId: " + expenseTypeId + " and employeeId: " + employeeId);
-//
-//        List<ExpenseClaimEntity> expenses = expenseClaimrepository.findByExpenseTypeIdAndEmployeeId(expenseTypeId, employeeId);
-//        if (expenses == null || expenses.isEmpty()) {
-//            System.out.println("No expenses found for the given criteria.");
-//            return null;
-//        }
-//
-//        Double totalAmount = expenses.stream().mapToDouble(ExpenseClaimEntity::getTotal).sum();
-//        System.out.println("Total amount calculated: " + totalAmount);
-//        return totalAmount;
-//    }
-
-    public Double getTotalAmountByTypeIdAndEmployee(Integer expenseTypeId, Integer employeeId) {
-        return expenseClaimEntryrepository.getTotalAmountByTypeIdAndEmployee(expenseTypeId, employeeId);
+    if (entries.isEmpty()) {
+        System.out.println("No entries found for expenseTypeId: " + expenseTypeId + " and employeeId: " + employeeId);
+        return null;
     }
-//public List<TotalClaimPerTypePerEmployeeDTO> getTotalClaimsPerTypePerEmployee() {
-//    List<Object[]> results = expenseClaimrepository.getTotalClaimsPerTypePerEmployee();
-//
-//    List<TotalClaimPerTypePerEmployeeDTO> dtos = new ArrayList<>();
-//    for (Object[] result : results) {
-//        TotalClaimPerTypePerEmployeeDTO dto = new TotalClaimPerTypePerEmployeeDTO();
-//        dto.setEmployeeId((Integer) result[0]);
-//        dto.setExpenseTypeId((Integer) result[1]);
-//        dto.setTotalAmount((Double) result[2]);
-//        dtos.add(dto);
-//    }
-//
-//    return dtos;
-//}
+
+    double total = entries.stream()
+            .mapToDouble(ExpenseClaimEntryEntity::getTotal)
+            .sum();
+    System.out.println("Total amount for expenseTypeId: " + expenseTypeId + " and employeeId: " + employeeId + " is " + total);
+
+    return total;
+}
+
 
 }

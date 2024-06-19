@@ -47,15 +47,7 @@ public class EmployeeController {
         }
     }
 
-//    @PatchMapping("/employees/{id}")
-//    public Apiresponse updateEmployee(@PathVariable Integer id, @RequestBody Map<String, Object> updateFields) {
-//        try {
-//            service1.updateEmployee(id, updateFields);
-//            return new Apiresponse(true, "Employee updated successfully", id);
-//        } catch (ResourceNotFoundException e) {
-//            return new Apiresponse(false, "Employee not found with id: " + id, null);
-//        }
-//    }
+
 @PatchMapping("/employees/{id}")
 public ResponseEntity<Apiresponse> updateEmployee(@PathVariable Integer id, @RequestBody Map<String, Object> updateFields) {
     try {

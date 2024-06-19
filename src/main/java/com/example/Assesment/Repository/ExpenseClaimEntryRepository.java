@@ -13,16 +13,14 @@ import java.util.List;
 @Repository
 public interface ExpenseClaimEntryRepository extends JpaRepository<ExpenseClaimEntryEntity, Integer> {
 
-    @Query(value = "SELECT DISTINCT ExpClaimEntry.expense_type_id FROM ExpenseClaimEntry ExpClaimEntry JOIN ExpenseClaim ExpClaim ON ExpClaimEntry.expense_claim_id = ExpClaim.expense_claim_id JOIN Employee Emp ON ExpClaim.employee_id = Emp.emp_id  WHERE ExpClaimEntry.expense_Claim_Entry_Id = ?1", nativeQuery = true)
-    Double getTotalAmountByTypeIdAndEmployee(Integer expenseTypeId, Integer employeeId);
+
+
+    @Query("SELECT e FROM ExpenseClaimEntryEntity e JOIN ExpenseClaimEntity c ON e.expenseClaimId = c.expenseClaimId WHERE e.expenseTypeId = :expenseTypeId AND c.employeeId = :employeeId")
+    List<ExpenseClaimEntryEntity> findByExpenseTypeIdAndEmployeeId(@Param("expenseTypeId") Integer expenseTypeId, @Param("employeeId") Integer employeeId);
 
     List<ExpenseClaimEntryEntity> findAllByExpenseClaimId(Integer expenseClaimId);
 
 
-
-//
-//    List<ExpenseClaimEntity> findByExpenseTypeIdAndEmployeeId(Integer expenseTypeId, Integer employeeId);
-//}
 }
 
 
